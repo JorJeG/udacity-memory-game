@@ -59,6 +59,7 @@ function shuffle(array) {
 var deck = document.querySelector('.deck');
 var moves = document.querySelector('.moves');
 var restart = document.querySelector('.restart');
+var stars = document.querySelector('.stars');
 var openCards = [];
 var countMoves = 0;
 
@@ -75,6 +76,7 @@ function clickCard(event) {
         openCards = [];
         countMoves++;
         renderMoves(countMoves);
+        starRaiting();
     }
 }
 
@@ -115,13 +117,43 @@ function hideCard(elements) {
     });
 }
 
+function starRaiting() {
+    if (countMoves > 16 && countMoves <= 20) {
+        renderStars(2);
+    } else if (countMoves > 20 && countMoves <= 24) {
+        renderStars(1);
+    } else if (countMoves > 24) {
+        renderStars(0);
+    } else {
+        renderStars(3);
+    }
+}
+
+function renderStars(num) {
+    var fragment = document.createDocumentFragment();
+    for(let i = 0; i < 3; i++) {
+        var star = document.createElement('li');
+        if(i >= num) {
+            star.innerHTML ='<li><i class="fa fa-star-o"></i></li>';
+        } else {
+            star.innerHTML = '<li><i class="fa fa-star"></i></li>'
+        }
+        fragment.appendChild(star);
+    }
+    stars.innerHTML = '';
+    stars.appendChild(fragment);
+}
+
 function restartGame() {
     deck.innerHTML = '';
+    countMoves = 0;
     displayCards();
     renderMoves(0);
+    starRaiting();
 }
 
 displayCards();
 renderMoves(0);
+starRaiting();
 deck.addEventListener('click', clickCard);
 restart.addEventListener('click', restartGame);
