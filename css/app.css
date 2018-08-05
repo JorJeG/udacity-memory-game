@@ -111,3 +111,17 @@ h1 {
     float: right;
     cursor: pointer;
 }
+
+@media (max-width: 660px) {
+    .deck {
+        width: 330px;
+        min-height: 340px;
+    }
+    .deck .card {
+        width: 62px;
+        height: 63px;
+    }
+    .score-panel {
+        width: 310px;
+    }
+}
