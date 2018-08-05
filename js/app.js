@@ -15,14 +15,14 @@ var allCards = ['diamond', 'diamond',
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
-function displayCard() {
+function displayCards() {
     var shuffledCards = shuffle(allCards);
-    var deck = document.querySelector('.deck');
-
     var fragment = document.createDocumentFragment();
+
     for(let i = 0; i < shuffledCards.length; i++) {
         var card = document.createElement('li');
-        card.classList.add('card', 'show', 'open');
+        card.classList.add('card');
+        card.dataset.symbol = shuffledCards[i];
         card.innerHTML = `<i class="fa fa-${shuffledCards[i]}"></i>`;
         fragment.appendChild(card);
     }
@@ -55,4 +55,73 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
-displayCard();
+
+var deck = document.querySelector('.deck');
+var moves = document.querySelector('.moves');
+var restart = document.querySelector('.restart');
+var openCards = [];
+var countMoves = 0;
+
+function clickCard(event) {
+    var clickedCard = event.target;
+    if (clickedCard.classList.contains('show')) {
+        return;
+    }
+    displayCard(clickedCard);
+    addCardToList(clickedCard.dataset.symbol);
+
+    if (openCards.length > 1) {
+        matchCard(clickedCard.dataset.symbol);
+        openCards = [];
+        countMoves++;
+        renderMoves(countMoves);
+    }
+}
+
+function renderMoves(countMoves) {
+    moves.textContent = countMoves;
+}
+
+function displayCard(card) {
+    card.classList.add('show', 'open');
+}
+
+function addCardToList(card) {
+    openCards.push(card);
+}
+
+function matchCard(cardSymbol) {
+    const elements = deck.querySelectorAll(`.open`);
+
+    if (openCards[0] === cardSymbol) {
+        lockCardOpen(elements);
+    } else {
+        hideCard(elements);
+    }
+}
+
+function lockCardOpen(elements) {
+    elements.forEach(function(elem) {
+        elem.classList.add('match');
+        elem.classList.remove('show', 'open');
+    });
+}
+
+function hideCard(elements) {
+    elements.forEach(function(elem) {
+        setTimeout(function() {
+            elem.classList.remove('show', 'open');
+        }, 700);
+    });
+}
+
+function restartGame() {
+    deck.innerHTML = '';
+    displayCards();
+    renderMoves(0);
+}
+
+displayCards();
+renderMoves(0);
+deck.addEventListener('click', clickCard);
+restart.addEventListener('click', restartGame);
