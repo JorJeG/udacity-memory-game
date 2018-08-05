@@ -112,6 +112,22 @@ h1 {
     cursor: pointer;
 }
 
+.swal-overlay {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.swal-content .stars {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin: 0 5px 0 0;
+}
+
+.swal-content .stars li {
+    list-style: none;
+    display: inline-block;
+}
+
 @media (max-width: 660px) {
     .deck {
         width: 330px;

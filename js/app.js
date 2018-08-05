@@ -60,8 +60,10 @@ var deck = document.querySelector('.deck');
 var moves = document.querySelector('.moves');
 var restart = document.querySelector('.restart');
 var stars = document.querySelector('.stars');
+var countStar = 3;
 var openCards = [];
 var countMoves = 0;
+var matchedCard = 0;
 
 function clickCard(event) {
     var clickedCard = event.target;
@@ -77,6 +79,9 @@ function clickCard(event) {
         countMoves++;
         renderMoves(countMoves);
         starRaiting();
+    }
+    if (matchedCard === 8) {
+        winGame();
     }
 }
 
@@ -97,6 +102,7 @@ function matchCard(cardSymbol) {
 
     if (openCards[0] === cardSymbol) {
         lockCardOpen(elements);
+        matchedCard++;
     } else {
         hideCard(elements);
     }
@@ -119,17 +125,16 @@ function hideCard(elements) {
 
 function starRaiting() {
     if (countMoves > 16 && countMoves <= 20) {
-        renderStars(2);
+        countStar = 2;
     } else if (countMoves > 20 && countMoves <= 24) {
-        renderStars(1);
+        countStar = 1;
     } else if (countMoves > 24) {
-        renderStars(0);
-    } else {
-        renderStars(3);
+        countStar = 0;
     }
+    renderStars(stars, countStar);
 }
 
-function renderStars(num) {
+function renderStars(element, num) {
     var fragment = document.createDocumentFragment();
     for(let i = 0; i < 3; i++) {
         var star = document.createElement('li');
@@ -140,13 +145,33 @@ function renderStars(num) {
         }
         fragment.appendChild(star);
     }
-    stars.innerHTML = '';
-    stars.appendChild(fragment);
+    element.innerHTML = '';
+    element.appendChild(fragment);
+}
+
+function winGame() {
+    var endStars = document.createElement('ul');
+    endStars.classList.add('stars');
+    renderStars(endStars, countStar);
+    swal({
+        title: 'Congratulation',
+        text: `You achieve`,
+        content: endStars,
+        icon: 'success',
+        button: {
+            text: 'Play again!'
+        },
+        closeOnEsc: false,
+        closeOnClickOutside: false
+    }).then(function() {
+        restartGame();
+    })
 }
 
 function restartGame() {
     deck.innerHTML = '';
     countMoves = 0;
+    countStar = 3;
     displayCards();
     renderMoves(0);
     starRaiting();
