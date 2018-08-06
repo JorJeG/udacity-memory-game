@@ -129,11 +129,10 @@ function hideCard(elements) {
 function starRaiting() {
     if (countMoves > 16 && countMoves <= 20) {
         countStar = 2;
-    } else if (countMoves > 20 && countMoves <= 24) {
+    } else if (countMoves > 20) {
         countStar = 1;
-    } else if (countMoves > 24) {
-        countStar = 0;
     }
+
     renderStars(stars, countStar);
 }
 
