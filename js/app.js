@@ -60,14 +60,17 @@ var deck = document.querySelector('.deck');
 var moves = document.querySelector('.moves');
 var restart = document.querySelector('.restart');
 var stars = document.querySelector('.stars');
+var timer = document.getElementById('timer');
 var countStar = 3;
 var openCards = [];
 var countMoves = 0;
 var matchedCard = 0;
+var formattedTime;
+var intervalId;
 
 function clickCard(event) {
     var clickedCard = event.target;
-    if (clickedCard.classList.contains('show')) {
+    if (clickedCard.classList.contains('show') || clickedCard.nodeName === 'I') {
         return;
     }
     displayCard(clickedCard);
@@ -149,13 +152,28 @@ function renderStars(element, num) {
     element.appendChild(fragment);
 }
 
+function startTimer() {
+    var start = Date.now();
+    
+    function render() {
+        var diff = Date.now() - start;
+        var millis = Math.floor(diff/1000)%60;
+        var minutes = Math.floor(diff/60000);
+        formattedTime = `${minutes > 9 ? minutes : '0' + minutes}:${millis > 9 ? millis  : '0' + millis}`;
+        timer.textContent = formattedTime;
+    }
+    
+    intervalId = setInterval(render, 1000);
+}
+
 function winGame() {
     var endStars = document.createElement('ul');
     endStars.classList.add('stars');
     renderStars(endStars, countStar);
+    clearInterval(intervalId);
     swal({
         title: 'Congratulation!',
-        text: `You've earned`,
+        text: `You spent ${formattedTime}\nYou've earned`,
         content: endStars,
         icon: 'success',
         button: {
@@ -164,16 +182,20 @@ function winGame() {
         closeOnEsc: false,
         closeOnClickOutside: false
     }).then(function() {
+        startTimer();
         startNewGame();
     })
 }
 
 function startNewGame() {
     deck.innerHTML = '';
+    timer.textContent = '00:00';
     countMoves = 0;
     countStar = 3;
     matchedCard = 0;
     openCards = [];
+    clearInterval(intervalId);
+    startTimer();
     displayCards();
     renderMoves(0);
     starRaiting();
