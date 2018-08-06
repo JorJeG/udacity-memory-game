@@ -154,8 +154,8 @@ function winGame() {
     endStars.classList.add('stars');
     renderStars(endStars, countStar);
     swal({
-        title: 'Congratulation',
-        text: `You achieve`,
+        title: 'Congratulation!',
+        text: `You've earned`,
         content: endStars,
         icon: 'success',
         button: {
@@ -164,21 +164,22 @@ function winGame() {
         closeOnEsc: false,
         closeOnClickOutside: false
     }).then(function() {
-        restartGame();
+        startNewGame();
     })
 }
 
-function restartGame() {
+function startNewGame() {
     deck.innerHTML = '';
     countMoves = 0;
     countStar = 3;
+    matchedCard = 0;
+    openCards = [];
     displayCards();
     renderMoves(0);
     starRaiting();
 }
 
-displayCards();
-renderMoves(0);
-starRaiting();
+startNewGame();
+
 deck.addEventListener('click', clickCard);
-restart.addEventListener('click', restartGame);
+restart.addEventListener('click', startNewGame);
