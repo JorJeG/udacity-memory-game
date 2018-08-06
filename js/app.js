@@ -1,7 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
-var allCards = ['diamond', 'diamond',
+const allCards = ['diamond', 'diamond',
                 'paper-plane-o', 'paper-plane-o',
                 'anchor', 'anchor',
                 'bolt', 'bolt',
@@ -16,11 +16,11 @@ var allCards = ['diamond', 'diamond',
  *   - add each card's HTML to the page
  */
 function displayCards() {
-    var shuffledCards = shuffle(allCards);
-    var fragment = document.createDocumentFragment();
+    const shuffledCards = shuffle(allCards);
+    const fragment = document.createDocumentFragment();
 
     for(let i = 0; i < shuffledCards.length; i++) {
-        var card = document.createElement('li');
+        const card = document.createElement('li');
         card.classList.add('card');
         card.dataset.symbol = shuffledCards[i];
         card.innerHTML = `<i class="fa fa-${shuffledCards[i]}"></i>`;
@@ -31,7 +31,7 @@ function displayCards() {
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    const currentIndex = array.length, temporaryValue, randomIndex;
 
     while (currentIndex !== 0) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -56,20 +56,20 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
-var deck = document.querySelector('.deck');
-var moves = document.querySelector('.moves');
-var restart = document.querySelector('.restart');
-var stars = document.querySelector('.stars');
-var timer = document.getElementById('timer');
-var countStar = 3;
-var openCards = [];
-var countMoves = 0;
-var matchedCard = 0;
-var formattedTime;
-var intervalId;
+const deck = document.querySelector('.deck');
+const moves = document.querySelector('.moves');
+const restart = document.querySelector('.restart');
+const stars = document.querySelector('.stars');
+const timer = document.getElementById('timer');
+const openCards = [];
+let countStar = 3;
+let countMoves = 0;
+let matchedCard = 0;
+let formattedTime;
+let intervalId;
 
 function clickCard(event) {
-    var clickedCard = event.target;
+    const clickedCard = event.target;
     if (clickedCard.classList.contains('show') || clickedCard.nodeName === 'I') {
         return;
     }
@@ -138,9 +138,9 @@ function starRaiting() {
 }
 
 function renderStars(element, num) {
-    var fragment = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment();
     for(let i = 0; i < 3; i++) {
-        var star = document.createElement('li');
+        const star = document.createElement('li');
         if(i >= num) {
             star.innerHTML ='<li><i class="fa fa-star-o"></i></li>';
         } else {
@@ -153,12 +153,12 @@ function renderStars(element, num) {
 }
 
 function startTimer() {
-    var start = Date.now();
+    const start = Date.now();
     
     function render() {
-        var diff = Date.now() - start;
-        var millis = Math.floor(diff/1000)%60;
-        var minutes = Math.floor(diff/60000);
+        const diff = Date.now() - start;
+        const millis = Math.floor(diff/1000)%60;
+        const minutes = Math.floor(diff/60000);
         formattedTime = `${minutes > 9 ? minutes : '0' + minutes}:${millis > 9 ? millis  : '0' + millis}`;
         timer.textContent = formattedTime;
     }
@@ -167,7 +167,7 @@ function startTimer() {
 }
 
 function winGame() {
-    var endStars = document.createElement('ul');
+    const endStars = document.createElement('ul');
     endStars.classList.add('stars');
     renderStars(endStars, countStar);
     clearInterval(intervalId);
